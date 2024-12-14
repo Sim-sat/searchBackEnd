@@ -101,6 +101,9 @@ public final class SearchQuery {
         // descending sorting the keys by the value of tfidf score
         List<String> sortedUrls = new ArrayList<>(combinedScoreMap.keySet());
         sortedUrls.sort((k1, k2) -> combinedScoreMap.get(k2).compareTo(combinedScoreMap.get(k1)));
+        if (sortedUrls.size() > 30) {
+            sortedUrls = sortedUrls.subList(0, 30);
+        }
         return sortedUrls;
     }
 

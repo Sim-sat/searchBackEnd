@@ -17,7 +17,7 @@ public final class PageGradingUtil {
     /**
      * calculates pagerank iteratively
      *
-     * @param forwardIndex forward index{@link org.Logic.ForwardIndex}
+     * @param forwardIndex forward index{@link Logic.ForwardIndex}
      * @return map that maps the pagerank value to url
      * @see <a href="https://en.wikipedia.org/wiki/PageRank">...</a>
      */

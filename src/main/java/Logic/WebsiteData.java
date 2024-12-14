@@ -19,13 +19,15 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
  * @author Simon Sattelberger
  */
 public class WebsiteData {
-    private List<String> outgoingLinks = new ArrayList<>();
+    public List<String> outgoingLinks = new ArrayList<>();
     private List<String> tokenList = new ArrayList<>();
     private double[] vector;
-    private String title;
-    private String completeContent;
-    private double pageRank;
-    private String url;
+    public String title;
+    public String completeContent;
+    public double pageRank;
+    public String url;
+    public String body;
+    public String header;
 
     public WebsiteData(String pUrl, String pTitle, String pHeader, String pContent, List<String> pOutgoingLinks) {
         this.url = pUrl;
@@ -33,6 +35,8 @@ public class WebsiteData {
         this.outgoingLinks = pOutgoingLinks;
         this.completeContent = "".concat(title).concat(" ").concat(pHeader).concat(" ").concat(pContent);
         this.tokenList = createTokens(completeContent);
+        this.body = pContent;
+        this.header = pHeader;
     }
 
     /**
