@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Path("/hello")
+@Path("/search")
 public class ExampleResource {
 
     public static void main(String[] args) {
@@ -24,9 +24,9 @@ public class ExampleResource {
     }
 
     @GET
-    @Path("{word}")
+    @Path("/query/{word}")
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello(@PathParam("word") String word) {
+    public String search(@PathParam("word") String word) {
         List<String> results;
         List<String> websiteData = new ArrayList<>();
         Map<String, WebsiteData> forwardIndexMap = Main.forwardIndexMap;
@@ -36,6 +36,24 @@ public class ExampleResource {
             for (String result : results) {
 
                 websiteData.add(objectMapper.writeValueAsString(forwardIndexMap.get(result)));
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return websiteData.toString();
+    }
+
+    @GET
+    @Path("/all")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getAll() {
+        List<String> websiteData = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            for (String entry : Main.forwardIndexMap.keySet()) {
+
+                websiteData.add(objectMapper.writeValueAsString(Main.forwardIndexMap.get(entry)));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
