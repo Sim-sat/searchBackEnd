@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    container_name: serverweb20
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
