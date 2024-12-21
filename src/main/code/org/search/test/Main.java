@@ -1,4 +1,4 @@
-package org.search;
+package test;
 
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;

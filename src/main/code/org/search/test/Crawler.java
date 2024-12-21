@@ -1,4 +1,4 @@
-package org.search;
+package test;
 
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.jsoup.select.Elements;
 
 /**
  * Crawls given websites from a list of urls and saves the results as a List of
- * WebsiteData. {@link org.Logic.WebsiteData}
+ * WebsiteData. {@link }
  *
  * @author Simon Sattelberger
  */
@@ -29,15 +29,6 @@ public class Crawler {
         this.seedUrls = pSeedUrls;
     }
 
-    public static void main(String[] args) throws IOException {
-
-        String[] pSeedUrls = {"http://mozzarella-and-edam.cheesy3",
-                "http://asiago-and-brie.cheesy3",
-                "http://quark-and-slovakianbryndza.cheesy3"};
-        Crawler main = new Crawler(pSeedUrls);
-        main.start();
-
-    }
 
     /**
      * Starts the crawler
