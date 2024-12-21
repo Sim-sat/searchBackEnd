@@ -1,67 +1,47 @@
-# searchenginequarkus
+This project consists of two main components:
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+1. **[Frontend](https://github.com/Sim-sat/searchFrontEnd)**: A React application that provides an interface for searching and visualizing data from an intranet.
+2. **[Backend](https://github.com/Sim-sat/searchBackEnd.git)**: A Quarkus-based application running on an Azure Virtual Machine (VM) that powers the API and handles data processing. The webserver runs in a nginx docker. 
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+---
+# [Live Preview](https://searchenginecheese.netlify.app/ "Live Preview")
 
-## Running the application in dev mode
+### Features
+- **Intranet Search**: Search across 260 intranet pages
+- **Search Modes**:
+  - tdidf score
+  - cosine similarity
+  - cosine similarity + pagerank
+![search](src/assets/search.png)
+- **Graph Visualization**: Display relationships between intranet pages in an interactive graph.
+    - hover node to highlight all links
+    - click node to see tokens with tf-score
+    - circular mode
+  ![circular](src/assets/circular.png)
+    - force mode
+  ![force](src/assets/force.png)
 
-You can run your application in dev mode that enables live coding using:
+- **PageRank and TF Score Visualization**: Visualize page ranking and term frequency scores.
 
+The content of the sites is very basic and the site has no real use. The sites contain a lot of content about cheeses so use corresponding queries. 
+
+### Running application
+
+1. Clone repository
 ```shell script
-./mvnw quarkus:dev
+git clone https://github.com/Sim-sat/searchBackEnd.git
+cd searchBackEnd
 ```
-
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
-
-## Packaging and running the application
-
-The application can be packaged using:
-
+2. Start nginx docker
 ```shell script
-./mvnw package
+cd webserver
+docker compose up -d
 ```
-
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
+3. Build Quarkus project using uber-jar
 ```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+mvn clean package
 ```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using:
-
+4. Run Quarkus project
 ```shell script
-./mvnw package -Dnative
+java -jar target/searchenginequarkus-1.0-SNAPSHOT-runner.jar
 ```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/searchenginequarkus-1.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus
-  REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
