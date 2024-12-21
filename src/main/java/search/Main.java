@@ -3,6 +3,7 @@ package search;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 
 import java.io.IOException;
 import java.util.Map;
@@ -27,17 +28,16 @@ public class Main {
     public static Map<String, WebsiteData> forwardIndexMap;
     public static Map<String, Map<String, Double>> reverseIndexMap;
     public static Crawler crawler;
-    public static ForwardIndex forwardIndex;
-
+    ForwardIndex forwardIndex;
 
     void onStart(@Observes StartupEvent ev) throws IOException {
 
         final Logger LOGGER = Logger.getLogger("ListenerBean");
         crawler = new Crawler(seedUrls);
         forwardIndex = new ForwardIndex();
-
         forwardIndex.addEntries(crawler.start());
         forwardIndexMap = forwardIndex.getForwardIndex();
+        LOGGER.info(String.valueOf(forwardIndexMap.size()));
         reverseIndexMap = ReverseIndex.getReverseIndex(forwardIndexMap);
         forwardIndex.calculateVector(reverseIndexMap);
         forwardIndex.calculatePageRankDamped();

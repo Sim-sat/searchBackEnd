@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Properties;
-
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.CoreDocument;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import opennlp.tools.lemmatizer.LemmatizerME;
+import opennlp.tools.lemmatizer.LemmatizerModel;
+import opennlp.tools.postag.POSTaggerME;
+import opennlp.tools.postag.POSModel;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 /**
  * A websitedata object contains all important data from a website.
@@ -38,6 +39,8 @@ public class WebsiteData {
         this.body = pContent;
         this.header = pHeader;
     }
+
+
 
     /**
      * creates a printable string from object
@@ -162,21 +165,40 @@ public class WebsiteData {
      * @return lemmatized list
      */
     private static List<String> lemmatize(List<String> inputList) {
-        List<String> outputList = new ArrayList<>();
+        try{
 
-        // create a NLP Pipeline for tokenizing
-        Properties props = new Properties();
-        props.setProperty("annotators", "tokenize,ssplit,pos,lemma");
-        StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-        // looping through the input list to create the tokenized version and adding it
-        // to the output list
-        for (String token : inputList) {
-            CoreDocument document = pipeline.processToCoreDocument(token);
-            CoreLabel label = document.tokens().get(0);
-            outputList.add(label.lemma());
 
+            List<String> outputList = new ArrayList<>();
+            // Load POS Tagger model
+            InputStream modelIn = (new FileInputStream("src/main/resources/en-pos.bin"));
+            POSModel model2 = new POSModel(modelIn);
+            POSTaggerME posTagger = new POSTaggerME(model2);
+            LemmatizerModel model = null;
+            // Load Lemmatizer dictionary
+            InputStream dictLemmatizer = new FileInputStream("src/main/resources/en-lemmatizer.bin");
+            model = new LemmatizerModel(dictLemmatizer);
+            LemmatizerME lemmatizerME = new LemmatizerME(model);
+
+
+            String[] tokens = inputList.toArray(new String[0]);
+
+            // POS tagging
+            String[] posTags = posTagger.tag(tokens);
+
+            // Lemmatization
+            String[] lemmas = lemmatizerME.lemmatize(tokens, posTags);
+
+            // Add lemmatized tokens to output list
+            for (String lemma : lemmas) {
+                outputList.add(lemma);
+            }
+            return outputList;
         }
-        return outputList;
+        catch (Exception e) {
+        }
+            return null;
+        }
+
     }
 
-}
+

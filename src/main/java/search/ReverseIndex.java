@@ -1,5 +1,7 @@
 package search;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,6 +13,7 @@ import java.util.TreeMap;
  * Represents a reverse index. A reverse index is a
  * Data structure that maps terms to the documents in which they are.
  */
+
 public final class ReverseIndex {
 
     private ReverseIndex() {
@@ -19,7 +22,7 @@ public final class ReverseIndex {
     /**
      * creates a reverse index from a forward index
      *
-     * @param mapOfWebsiteData forward index {@link org.Logic.ForwardIndex}
+     * @param mapOfWebsiteData forward index {@link ForwardIndex}
      * @return reverse index
      * @throws IOException
      */
@@ -71,8 +74,8 @@ public final class ReverseIndex {
      * {@see https://en.wikipedia.org/wiki/Tf-idf}
      *
      * @param token           token
-     * @param forwardIndexMap forward index{@link org.Logic.ForwardIndex}
-     * @param reverseIndexMap reverse index {@link org.Logic.ReverseIndex}
+     * @param forwardIndexMap forward index{@link ForwardIndex}
+     * @param reverseIndexMap reverse index {@link ReverseIndex}
      * @return idf score
      */
     static double getIDF(String token, Map<String, WebsiteData> forwardIndexMap,

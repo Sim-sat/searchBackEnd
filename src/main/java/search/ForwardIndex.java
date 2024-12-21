@@ -1,5 +1,7 @@
 package search;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.TreeMap;
  *
  * @author Simon Sattelberger
  */
+
 public class ForwardIndex {
     private Map<String, WebsiteData> websiteDataMap = new TreeMap<>();
     private final double DAMPING_FACTOR = 0.85;

@@ -1,11 +1,21 @@
 package search;
 
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.logging.Logger;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import opennlp.tools.lemmatizer.LemmatizerME;
+import opennlp.tools.lemmatizer.LemmatizerModel;
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerME;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -23,7 +33,7 @@ public class Crawler {
     private List<WebsiteData> crawledSites = new ArrayList<>();
     private final int LIMIT = 1024;
     private int numberOfLinks;
-
+    private static final Logger logger = Logger.getLogger(Crawler.class.getName());
     public Crawler(String[] pSeedUrls) {
 
         this.seedUrls = pSeedUrls;
