@@ -25,7 +25,9 @@ This project consists of two main components:
 
 The content of the sites is very basic and the site has no real use. The sites contain a lot of content about cheeses so use corresponding queries. 
 
-### Running application
+
+
+### Running backend
 
 1. Clone repository
 ```shell script
