@@ -1,4 +1,4 @@
-package Logic;
+package org.search;
 
 import java.io.IOException;
 import java.util.Collections;

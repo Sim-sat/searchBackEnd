@@ -1,4 +1,4 @@
-package Logic;
+package org.search;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +20,7 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
  */
 public class WebsiteData {
     public List<String> outgoingLinks = new ArrayList<>();
-    private List<String> tokenList = new ArrayList<>();
+    public List<String> tokenList = new ArrayList<>();
     private double[] vector;
     public String title;
     public String completeContent;

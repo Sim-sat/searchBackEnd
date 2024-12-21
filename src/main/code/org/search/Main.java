@@ -1,4 +1,4 @@
-package Logic;
+package org.search;
 
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.context.ApplicationScoped;

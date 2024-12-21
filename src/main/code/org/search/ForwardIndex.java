@@ -1,4 +1,4 @@
-package Logic;
+package org.search;
 
 import java.util.Arrays;
 import java.util.HashMap;

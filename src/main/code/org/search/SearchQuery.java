@@ -1,4 +1,4 @@
-package Logic;
+package org.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public final class SearchQuery {
 
-    private static final double WEIGHT = 0.8;
+    private static final double WEIGHT = 0.85;
     // only used for graph creation
     public static Map<String, Double> finalScoreMap;
 
@@ -79,7 +79,7 @@ public final class SearchQuery {
      * @see <a href="https://en.wikipedia.org/wiki/PageRank">...</a>
      */
     public static List<String> searchPageRank(final String query, Map<String, WebsiteData> mapOfWebsiteData,
-                                              Map<String, Map<String, Double>> reverseIndexMap)
+                                                Map<String, Map<String, Double>> reverseIndexMap)
             throws IOException {
         Map<String, Double> combinedScoreMap = new HashMap<>();
 
@@ -104,6 +104,38 @@ public final class SearchQuery {
         if (sortedUrls.size() > 30) {
             sortedUrls = sortedUrls.subList(0, 30);
         }
+        return sortedUrls;
+    }
+
+    /**
+     * Searching for all website containing the search query. The results are
+     * ordered by cosine similarity.
+     *
+     * @see <a href="https://en.wikipedia.org/wiki/Cosine_similarity">...</a>
+     *
+     * @param query            query which is searched for
+     * @param mapOfWebsiteData forward index {@link ForwardIndex}
+     * @param reverseIndexMap  reverse index {@link ReverseIndex}
+     * @return list of all found urls
+     * @throws IOException
+     */
+    public static List<String> searchCosine(final String query, Map<String, WebsiteData> mapOfWebsiteData,
+                                            Map<String, Map<String, Double>> reverseIndexMap)
+            throws IOException {
+        Map<String, Double> cosineMap = new HashMap<>();
+
+        double[] queryVector = getQueryVector(query, mapOfWebsiteData, reverseIndexMap);
+
+        // calculating cosine Similarity and saving it to cosineMap
+        List<String> result = search(query, mapOfWebsiteData, reverseIndexMap);
+        for (String url : result) {
+            double similarity = PageGradingUtil.cosineSimilarityImproved(queryVector,
+                    mapOfWebsiteData.get(url).getVector());
+            cosineMap.put(url, similarity);
+        }
+        // descending sorting the keys by the value of tfidf score
+        List<String> sortedUrls = new ArrayList<>(cosineMap.keySet());
+        sortedUrls.sort((k1, k2) -> cosineMap.get(k2).compareTo(cosineMap.get(k1)));
         return sortedUrls;
     }
 

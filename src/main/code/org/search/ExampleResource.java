@@ -1,16 +1,9 @@
-package org.example;
+package org.search;
 
-import Logic.Main;
-import Logic.SearchQuery;
-import Logic.WebsiteData;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +17,20 @@ public class ExampleResource {
     }
 
     @GET
-    @Path("/query/{word}")
+    @Path("/query/")
     @Produces(MediaType.TEXT_PLAIN)
-    public String search(@PathParam("word") String word) {
-        List<String> results;
+    public String search(@QueryParam("word") String word, @QueryParam("algorithm") String algo) {
+        List<String> results = new ArrayList<>();
         List<String> websiteData = new ArrayList<>();
         Map<String, WebsiteData> forwardIndexMap = Main.forwardIndexMap;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            results = SearchQuery.searchPageRank(word, forwardIndexMap, Main.reverseIndexMap);
+            results = switch (algo) {
+                case "tfidf" -> SearchQuery.search(word, forwardIndexMap, Main.reverseIndexMap);
+                case "pagerank" -> SearchQuery.searchPageRank(word, forwardIndexMap, Main.reverseIndexMap);
+                case "cosine" -> SearchQuery.searchCosine(word, forwardIndexMap, Main.reverseIndexMap);
+                default -> results;
+            };
             for (String result : results) {
 
                 websiteData.add(objectMapper.writeValueAsString(forwardIndexMap.get(result)));

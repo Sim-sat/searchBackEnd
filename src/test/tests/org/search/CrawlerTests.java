@@ -1,10 +1,8 @@
-package java;
+package org.search;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import Logic.Crawler;
 
 import java.io.*;
 
