@@ -1,6 +1,7 @@
 package org.search;
 
 import org.junit.jupiter.api.Test;
+import search.Crawler;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

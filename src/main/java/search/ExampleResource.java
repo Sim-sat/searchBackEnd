@@ -1,4 +1,4 @@
-package test;
+package search;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.*;
