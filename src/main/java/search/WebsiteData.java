@@ -1,8 +1,7 @@
 package search;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +10,6 @@ import opennlp.tools.lemmatizer.LemmatizerME;
 import opennlp.tools.lemmatizer.LemmatizerModel;
 import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.postag.POSModel;
-import java.io.FileInputStream;
 import java.io.InputStream;
 
 /**
@@ -20,8 +18,8 @@ import java.io.InputStream;
  * @author Simon Sattelberger
  */
 public class WebsiteData {
-    public List<String> outgoingLinks = new ArrayList<>();
-    public List<String> tokenList = new ArrayList<>();
+    public List<String> outgoingLinks;
+    public List<String> tokenList;
     private double[] vector;
     public String title;
     public String completeContent;
@@ -148,13 +146,18 @@ public class WebsiteData {
     private static List<String> removeStopWords(List<String> inputList) {
         try {
             // removing all stopwords
-            String stopwords = Files.readString(Path.of("src/main/resources/stopWords.txt"));
+            InputStream inputStream = WebsiteData.class.getClassLoader().getResourceAsStream("stopWords.txt");
+
+            if (inputStream == null) {
+                throw new IOException("Die Datei 'stopWords.txt' wurde nicht gefunden.");
+            }
+            String stopwords =  new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
             List<String> stopwordList = Arrays.asList(stopwords.split(","));
             inputList.removeAll(stopwordList);
             return inputList;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<String>();
+            return new ArrayList<>();
         }
     }
 
@@ -168,14 +171,19 @@ public class WebsiteData {
         try{
 
 
-            List<String> outputList = new ArrayList<>();
             // Load POS Tagger model
-            InputStream modelIn = (new FileInputStream("src/main/resources/en-pos.bin"));
+            InputStream modelIn = WebsiteData.class.getClassLoader().getResourceAsStream("en-pos.bin");
+            if (modelIn == null) {
+                throw new IOException("POS-Modell 'en-pos.bin' nicht gefunden.");
+            }
             POSModel model2 = new POSModel(modelIn);
             POSTaggerME posTagger = new POSTaggerME(model2);
-            LemmatizerModel model = null;
+            LemmatizerModel model;
             // Load Lemmatizer dictionary
-            InputStream dictLemmatizer = new FileInputStream("src/main/resources/en-lemmatizer.bin");
+            InputStream dictLemmatizer = WebsiteData.class.getClassLoader().getResourceAsStream("en-lemmatizer.bin");
+            if (dictLemmatizer == null) {
+                throw new IOException("Lemmatizer-Modell 'en-lemmatizer.bin' nicht gefunden.");
+            }
             model = new LemmatizerModel(dictLemmatizer);
             LemmatizerME lemmatizerME = new LemmatizerME(model);
 
@@ -189,12 +197,10 @@ public class WebsiteData {
             String[] lemmas = lemmatizerME.lemmatize(tokens, posTags);
 
             // Add lemmatized tokens to output list
-            for (String lemma : lemmas) {
-                outputList.add(lemma);
-            }
-            return outputList;
+            return new ArrayList<>(Arrays.asList(lemmas));
         }
         catch (Exception e) {
+            e.printStackTrace();
         }
             return null;
         }
