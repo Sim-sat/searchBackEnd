@@ -49,3 +49,4 @@ mvn clean package
 ```shell script
 java -jar target/searchenginequarkus-1.0-SNAPSHOT-runner.jar
 ```
+The uber jar can run anywhere it just need the nginx server
