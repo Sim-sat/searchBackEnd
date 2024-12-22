@@ -6,6 +6,8 @@ This project consists of two main components:
 ---
 # [Live Preview](https://searchenginecheese.netlify.app/ "Live Preview")
 
+## You have to allow unsafe connections (click on the https symbol and deactivate it)
+
 ### Features
 - **Intranet Search**: Search across 260 intranet pages
 - **Search Modes**:
